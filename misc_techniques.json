@@ -1,0 +1,16 @@
+[
+  {
+    "name": "trace-method",
+    "description": "Use HTTP TRACE verb",
+    "method": "TRACE"
+  },
+  {
+    "name": "post-empty-body",
+    "description": "Send POST with zero content length",
+    "method": "POST",
+    "headers": {
+      "Content-Length": "0"
+    },
+    "body": ""
+  }
+]

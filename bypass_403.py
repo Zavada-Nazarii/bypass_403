@@ -6,6 +6,7 @@ The script loads path, header and miscellaneous bypass techniques from
 JSON files so that the payloads can be tweaked without touching the code.
 It accepts a single URL or a file with many URLs and runs every technique
 against each target while reporting the HTTP status and body length.
+made by NZa
 """
 
 from __future__ import annotations
@@ -107,7 +108,7 @@ def read_targets(args: argparse.Namespace) -> List[Target]:
         else:
           raise ValueError(f"Cannot parse target line '{stripped}'")
   if not targets:
-    raise ValueError("Provide at least one --url, --base/--path pair, or --targets-file")
+    raise ValueError("Додайте хоча б одну ціль: --url, --base/--path або --targets-file")
   return targets
 
 
@@ -120,6 +121,14 @@ def build_ssl_context(verify: bool) -> ssl.SSLContext:
   return context
 
 
+def build_opener(proxy: Optional[str], context: ssl.SSLContext) -> urllib.request.OpenerDirector:
+  handlers = [urllib.request.HTTPSHandler(context=context)]
+  if proxy:
+    proxy_map = {"http": proxy, "https": proxy}
+    handlers.insert(0, urllib.request.ProxyHandler(proxy_map))
+  return urllib.request.build_opener(*handlers)
+
+
 def send_request(
   url: str,
   *,
@@ -127,7 +136,7 @@ def send_request(
   headers: Optional[Dict[str, str]] = None,
   body: Optional[str] = None,
   timeout: float,
-  context: ssl.SSLContext,
+  opener: urllib.request.OpenerDirector,
 ) -> Tuple[int, int, Optional[str]]:
   req_headers = dict(DEFAULT_HEADERS)
   if headers:
@@ -141,7 +150,7 @@ def send_request(
     data = body.encode("utf-8")
   request = urllib.request.Request(url, data=data, headers=req_headers, method=method)
   try:
-    with urllib.request.urlopen(request, timeout=timeout, context=context) as response:
+    with opener.open(request, timeout=timeout) as response:
       response_body = response.read()
       return response.status, len(response_body), None
   except urllib.error.HTTPError as exc:
@@ -158,8 +167,10 @@ def run_techniques(
   timeout: float,
   verify_tls: bool,
   spoof_ip: str,
+  proxy: Optional[str],
 ) -> None:
   context = build_ssl_context(verify_tls)
+  opener = build_opener(proxy, context)
   for target in targets:
     fmt_vars = target.template_vars()
     fmt_vars["spoof_ip"] = spoof_ip
@@ -194,7 +205,7 @@ def run_techniques(
             headers=formatted_headers,
             body=body,
             timeout=timeout,
-            context=context,
+            opener=opener,
           )
           success = 200 <= status < 400
           header_info = formatted_headers if category == "header" else None
@@ -202,7 +213,7 @@ def run_techniques(
         except urllib.error.URLError as err:
           header_info = formatted_headers if category == "header" else None
           print(format_result(category, name, url, None, 0, False, err.reason, header_info))
-    fetch_wayback_snapshot(target.default_url, timeout=timeout)
+    fetch_wayback_snapshot(target.default_url, timeout=timeout, opener=opener)
 
 
 def format_result(
@@ -225,12 +236,14 @@ def format_result(
   return f"  [{category}/{name}] {label} {status_text} {size}B -> {url}{reason_display}{header_display}"
 
 
-def fetch_wayback_snapshot(url: str, *, timeout: float) -> None:
+def fetch_wayback_snapshot(
+  url: str, *, timeout: float, opener: urllib.request.OpenerDirector
+) -> None:
   endpoint = "https://archive.org/wayback/available"
   query = urllib.parse.urlencode({"url": url})
   request_url = f"{endpoint}?{query}"
   try:
-    with urllib.request.urlopen(request_url, timeout=timeout) as response:
+    with opener.open(request_url, timeout=timeout) as response:
       payload = json.loads(response.read().decode("utf-8"))
   except Exception as err:
     print(f"  [wayback] lookup failed: {err}")
@@ -245,7 +258,10 @@ def fetch_wayback_snapshot(url: str, *, timeout: float) -> None:
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-  parser = argparse.ArgumentParser(description="Run 403 bypass payloads against targets.")
+  parser = argparse.ArgumentParser(
+    description="Run 403 bypass payloads against targets.",
+    epilog="Всі запити (включно з Wayback) можна пропустити через проксі за допомогою --proxy http://127.0.0.1:8080.",
+  )
   parser.add_argument("--url", action="append", help="Full URL to test (can be used multiple times)")
   parser.add_argument("--base", help="Base URL such as https://example.com")
   parser.add_argument("--path", help="Path portion without leading slash, used with --base")
@@ -261,6 +277,19 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     default="192.168.3.135",
     help="Value для IP-заголовків (default: 192.168.3.135)",
   )
+  parser.add_argument(
+    "--proxy",
+    help="URL проксі-сервера (наприклад, http://127.0.0.1:8080) через який підуть усі запити",
+  )
+  provided_args: Sequence[str]
+  if argv is None:
+    provided_args = sys.argv[1:]
+  else:
+    provided_args = argv
+  if not provided_args:
+    parser.print_help(file=sys.stderr)
+    print("\nПорада: додайте --proxy http://127.0.0.1:8080, щоб прогнати трафік через свій проксі.", file=sys.stderr)
+    parser.exit(1)
   return parser.parse_args(argv)
 
 
@@ -282,6 +311,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     timeout=args.timeout,
     verify_tls=args.verify_tls,
     spoof_ip=args.spoof_ip,
+    proxy=args.proxy,
   )
   return 0
 

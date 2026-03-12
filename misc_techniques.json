@@ -12,5 +12,29 @@
       "Content-Length": "0"
     },
     "body": ""
+  },
+  {
+    "name": "head-method",
+    "description": "Send HEAD requests to test verb-based ACLs",
+    "method": "HEAD"
+  },
+  {
+    "name": "options-preflight",
+    "description": "Trigger CORS-style OPTIONS preflight with custom method",
+    "method": "OPTIONS",
+    "headers": {
+      "Origin": "{origin}",
+      "Access-Control-Request-Method": "GET"
+    }
+  },
+  {
+    "name": "post-method-override",
+    "description": "Use POST with X-HTTP-Method-Override to mimic DELETE",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-HTTP-Method-Override": "DELETE"
+    },
+    "body": ""
   }
 ]
